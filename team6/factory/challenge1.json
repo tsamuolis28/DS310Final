@@ -1,0 +1,9 @@
+{
+	"name": "challenge1",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "1e68a788-80bd-457a-a9af-b8e59c85879e",
+		"tenantId": "d57d32cc-c121-488f-b07b-dfe705680c71"
+	}
+}
