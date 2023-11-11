@@ -21,13 +21,9 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "ParquetSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
-						},
-						"formatSettings": {
-							"type": "ParquetWriteSettings"
-						}
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -47,7 +43,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Parquet4",
+						"referenceName": "SqlServerTable1",
 						"type": "DatasetReference"
 					}
 				]
@@ -71,13 +67,9 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "ParquetSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
-						},
-						"formatSettings": {
-							"type": "ParquetWriteSettings"
-						}
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -97,7 +89,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Parquet5",
+						"referenceName": "SqlServerTable2",
 						"type": "DatasetReference"
 					}
 				]
@@ -121,13 +113,9 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "ParquetSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
-						},
-						"formatSettings": {
-							"type": "ParquetWriteSettings"
-						}
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -147,7 +135,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "Parquet6",
+						"referenceName": "SqlServerTable3",
 						"type": "DatasetReference"
 					}
 				]
