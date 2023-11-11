@@ -29,7 +29,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> source1",
-				"source1 filter(Country) ~> filter1"
+				"source1 filter(Country=='Afghanistan') ~> filter1"
 			]
 		}
 	}
