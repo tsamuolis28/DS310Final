@@ -6,14 +6,14 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Parquet1",
+						"referenceName": "AzureSQLDates",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
 				},
 				{
 					"dataset": {
-						"referenceName": "AzureSqlTable3",
+						"referenceName": "SQLServerDates",
 						"type": "DatasetReference"
 					},
 					"name": "source2"
@@ -29,68 +29,27 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "filter1"
+					"name": "union1"
 				},
 				{
-					"name": "filter2"
-				},
-				{
-					"name": "derivedColumn1"
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          DateKey as integer,",
-				"          FullDate as date,",
-				"          isWeekDay as boolean,",
-				"          DayOfWeek as integer,",
-				"          DayOfMonth as integer,",
-				"          DayOfQuarter as integer,",
-				"          DayOfYear as integer,",
-				"          DayName as string,",
-				"          WeekOfYear as integer,",
-				"          WeekName as string,",
-				"          MonthOfYear as integer,",
-				"          MonthName as string,",
-				"          CalendarQuarter as integer,",
-				"          CalendarQuarterName as string,",
-				"          CalendarYear as integer,",
-				"          FiscalMonth as integer,",
-				"          FiscalMonthName as string,",
-				"          FiscalQuarter as integer,",
-				"          FiscalQuarterName as string,",
-				"          FiscalYear as integer",
+				"          Country as string,",
+				"          CountryCode as string,",
+				"          Latitude as decimal(10,5),",
+				"          Longitude as decimal(10,5)",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> source1",
-				"source(output(",
-				"          DateKey as integer,",
-				"          FullDate as date,",
-				"          isWeekDay as boolean,",
-				"          DayOfWeek as integer,",
-				"          DayOfMonth as integer,",
-				"          DayOfQuarter as integer,",
-				"          DayOfYear as integer,",
-				"          DayName as string,",
-				"          WeekOfYear as integer,",
-				"          WeekName as string,",
-				"          MonthOfYear as integer,",
-				"          MonthName as string,",
-				"          CalendarQuarter as integer,",
-				"          CalendarQuarterName as string,",
-				"          CalendarYear as integer,",
-				"          FiscalMonth as integer,",
-				"          FiscalMonthName as string,",
-				"          FiscalQuarter as integer,",
-				"          FiscalQuarterName as string,",
-				"          FiscalYear as integer",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source2",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> source2",
 				"source(output(",
 				"          CountryName as string,",
 				"          CountryCode as string,",
@@ -152,10 +111,12 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> source3",
-				"source1 filter(Country=='Afghanistan') ~> filter1",
-				"source3 filter(ERROR_FUNCTION('')) ~> filter2",
-				"source2 derive(each(match(type == 'Date'), $$ = FullDate),",
-				"          each(match(type != 'Date'), $$ = DateKey)) ~> derivedColumn1"
+				"source1, source2, source3 union(byName: true)~> union1",
+				"union1 select(mapColumn(",
+				"          Date",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
