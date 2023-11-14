@@ -30,13 +30,7 @@
 			],
 			"transformations": [
 				{
-					"name": "union1"
-				},
-				{
 					"name": "select1"
-				},
-				{
-					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -127,16 +121,12 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> source3",
-				"source1, source3 union(byName: true)~> union1",
-				"union1 select(mapColumn(",
-				"          Date,",
+				"source1 select(mapColumn(",
 				"          FullDate",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 derive(Date = Date,",
-				"          FullDate = Date) ~> derivedColumn1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     umask: 0022,",
