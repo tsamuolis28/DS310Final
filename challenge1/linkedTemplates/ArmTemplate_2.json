@@ -776,7 +776,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Metrics Data Flow')]",
+			"name": "[concat(parameters('factoryName'), '/Dates Data Flow')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -795,15 +795,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "dataflow3",
+								"referenceName": "dataflow1",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"source2": {},
-									"Cases": {},
-									"Deaths": {},
-									"Recoveries": {}
+									"sink1": {}
 								}
 							},
 							"staging": {},
@@ -821,7 +818,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/dataflow3')]"
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
 			]
 		},
 		{
