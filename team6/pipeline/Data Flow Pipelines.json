@@ -75,7 +75,7 @@
 				}
 			},
 			{
-				"name": "Policies Flow",
+				"name": "Policy flow",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
