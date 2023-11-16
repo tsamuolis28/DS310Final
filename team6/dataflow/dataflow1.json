@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Parquet1",
+						"referenceName": "AzureSQLCountries",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -15,39 +15,28 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Parquet9",
+						"referenceName": "Parquet3",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "Countries"
 				}
 			],
 			"transformations": [
 				{
-					"name": "select1"
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
-				"source(output(",
-				"          Country as string,",
-				"          CountryCode as string,",
-				"          Latitude as decimal(10,5),",
-				"          Longitude as decimal(10,5)",
-				"     ),",
-				"     allowSchemaDrift: false,",
+				"source(allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> source1",
-				"source1 select(mapColumn(",
-				"          Country,",
-				"          CountryCode",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 sink(allowSchemaDrift: true,",
+				"source1 derive(CountryID = uuid()) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> Countries"
 			]
 		}
 	}
