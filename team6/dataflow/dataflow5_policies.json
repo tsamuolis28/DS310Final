@@ -123,7 +123,7 @@
 				"          H5_Investment_in_vaccines = {H5_Investment in vaccines},",
 				"          H6_Facial_Coverings = {H6_Facial Coverings},",
 				"          H6_Flag,",
-				"          {H7_Vaccination policy},",
+				"          H7_Vaccination_policy = {H7_Vaccination policy},",
 				"          H7_Flag,",
 				"          H8_Protection_of_elderly_people = {H8_Protection of elderly people},",
 				"          H8_Flag,",
