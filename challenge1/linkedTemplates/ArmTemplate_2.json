@@ -411,7 +411,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "AzureSQLCountries",
+								"referenceName": "Parquet1",
 								"type": "DatasetReference"
 							},
 							"name": "source1"
@@ -420,15 +420,15 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "Parquet3",
+								"referenceName": "Parquet9",
 								"type": "DatasetReference"
 							},
-							"name": "Countries"
+							"name": "sink1"
 						}
 					],
 					"transformations": [
 						{
-							"name": "derivedColumn1"
+							"name": "select1"
 						}
 					],
 					"scriptLines": [
@@ -442,12 +442,18 @@
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
 						"     format: 'parquet') ~> source1",
-						"source1 derive(CountryID = uuid()) ~> derivedColumn1",
-						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"source1 select(mapColumn(",
+						"          Country,",
+						"          CountryCode",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
+						"     partitionFileNames:['Dates'],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> Countries"
+						"     skipDuplicateMapOutputs: true) ~> sink1"
 					]
 				}
 			},
@@ -879,7 +885,7 @@
 								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"Countries": {}
+									"sink1": {}
 								}
 							},
 							"staging": {},
@@ -925,7 +931,7 @@
 								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"Countries": {}
+									"sink1": {}
 								}
 							},
 							"staging": {},
