@@ -276,11 +276,33 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
+						"fileName": "dbo.Country.parquet",
 						"container": "azuresql"
 					},
 					"compressionCodec": "snappy"
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "Country",
+						"type": "UTF8"
+					},
+					{
+						"name": "CountryCode",
+						"type": "UTF8"
+					},
+					{
+						"name": "Latitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "Longitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
