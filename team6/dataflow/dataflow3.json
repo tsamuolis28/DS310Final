@@ -1,7 +1,6 @@
 {
 	"name": "dataflow3",
 	"properties": {
-		"description": "",
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
@@ -26,21 +25,21 @@
 						"referenceName": "Parquet4",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "Cases"
 				},
 				{
 					"dataset": {
 						"referenceName": "Parquet5",
 						"type": "DatasetReference"
 					},
-					"name": "sink2"
+					"name": "Deaths"
 				},
 				{
 					"dataset": {
 						"referenceName": "Parquet6",
 						"type": "DatasetReference"
 					},
-					"name": "sink3"
+					"name": "Recoveries"
 				}
 			],
 			"transformations": [
@@ -108,8 +107,6 @@
 				"          Updated,",
 				"          Deaths,",
 				"          Deaths_Change,",
-				"          Latitude,",
-				"          Longitude,",
 				"          ISO2,",
 				"          ISO3,",
 				"          Country_Region,",
@@ -122,8 +119,6 @@
 				"          Updated,",
 				"          Confirmed,",
 				"          Confirmed_Change,",
-				"          Latitude,",
-				"          Longitude,",
 				"          ISO2,",
 				"          ISO3,",
 				"          Country_Region,",
@@ -137,8 +132,6 @@
 				"          Updated,",
 				"          Recovered,",
 				"          Recovered_Change,",
-				"          Latitude,",
-				"          Longitude,",
 				"          ISO2,",
 				"          ISO3,",
 				"          Country_Region,",
@@ -151,19 +144,19 @@
 				"     format: 'parquet',",
 				"     partitionFileNames:['Cases.Parquet'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"     skipDuplicateMapOutputs: true) ~> Cases",
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     partitionFileNames:['Deaths.Parquet'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink2",
+				"     skipDuplicateMapOutputs: true) ~> Deaths",
 				"select3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     partitionFileNames:['Recovered.Parquet'],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink3"
+				"     skipDuplicateMapOutputs: true) ~> Recoveries"
 			]
 		}
 	}

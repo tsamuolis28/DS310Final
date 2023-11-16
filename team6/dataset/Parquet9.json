@@ -1,0 +1,19 @@
+{
+	"name": "Parquet9",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage8",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "ods"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
