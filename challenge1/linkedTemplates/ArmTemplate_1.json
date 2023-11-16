@@ -1,0 +1,1279 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "challenge1"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "DateKey",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FullDate",
+						"type": "date"
+					},
+					{
+						"name": "isWeekDay",
+						"type": "bit"
+					},
+					{
+						"name": "DayOfWeek",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DayOfMonth",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DayOfQuarter",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DayOfYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DayName",
+						"type": "varchar"
+					},
+					{
+						"name": "WeekOfYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "WeekName",
+						"type": "varchar"
+					},
+					{
+						"name": "MonthOfYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MonthName",
+						"type": "varchar"
+					},
+					{
+						"name": "CalendarQuarter",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CalendarQuarterName",
+						"type": "varchar"
+					},
+					{
+						"name": "CalendarYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FiscalMonth",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FiscalMonthName",
+						"type": "varchar"
+					},
+					{
+						"name": "FiscalQuarter",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FiscalQuarterName",
+						"type": "varchar"
+					},
+					{
+						"name": "FiscalYear",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Dates"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbNoSqlContainer1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDbPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"CountryName": {
+							"type": "string"
+						},
+						"CountryCode": {
+							"type": "string"
+						},
+						"RegionName": {
+							"type": "null"
+						},
+						"RegionCode": {
+							"type": "null"
+						},
+						"Jurisdiction": {
+							"type": "string"
+						},
+						"Date": {
+							"type": "string"
+						},
+						"C1_School closing": {
+							"type": "integer"
+						},
+						"C1_Flag": {
+							"type": "integer"
+						},
+						"C2_Workplace closing": {
+							"type": "integer"
+						},
+						"C2_Flag": {
+							"type": "integer"
+						},
+						"C3_Cancel public events": {
+							"type": "integer"
+						},
+						"C3_Flag": {
+							"type": "integer"
+						},
+						"C4_Restrictions on gatherings": {
+							"type": "integer"
+						},
+						"C4_Flag": {
+							"type": "integer"
+						},
+						"C5_Close public transport": {
+							"type": "integer"
+						},
+						"C5_Flag": {
+							"type": "integer"
+						},
+						"C6_Stay at home requirements": {
+							"type": "integer"
+						},
+						"C6_Flag": {
+							"type": "integer"
+						},
+						"C7_Restrictions on internal movement": {
+							"type": "integer"
+						},
+						"C7_Flag": {
+							"type": "integer"
+						},
+						"C8_International travel controls": {
+							"type": "integer"
+						},
+						"E1_Income support": {
+							"type": "integer"
+						},
+						"E1_Flag": {
+							"type": "integer"
+						},
+						"E2_Debt contract relief": {
+							"type": "integer"
+						},
+						"E3_Fiscal measures": {
+							"type": "integer"
+						},
+						"E4_International support": {
+							"type": "integer"
+						},
+						"H1_Public information campaigns": {
+							"type": "integer"
+						},
+						"H1_Flag": {
+							"type": "integer"
+						},
+						"H2_Testing policy": {
+							"type": "integer"
+						},
+						"H3_Contact tracing": {
+							"type": "integer"
+						},
+						"H4_Emergency investment in healthcare": {
+							"type": "integer"
+						},
+						"H5_Investment in vaccines": {
+							"type": "integer"
+						},
+						"H6_Facial Coverings": {
+							"type": "integer"
+						},
+						"H6_Flag": {
+							"type": "integer"
+						},
+						"H7_Vaccination policy": {
+							"type": "integer"
+						},
+						"H7_Flag": {
+							"type": "integer"
+						},
+						"H8_Protection of elderly people": {
+							"type": "integer"
+						},
+						"H8_Flag": {
+							"type": "integer"
+						},
+						"M1_Wildcard": {
+							"type": "integer"
+						},
+						"StringencyIndex": {
+							"type": "integer"
+						},
+						"StringencyIndexForDisplay": {
+							"type": "integer"
+						},
+						"StringencyLegacyIndex": {
+							"type": "integer"
+						},
+						"StringencyLegacyIndexForDisplay": {
+							"type": "integer"
+						},
+						"GovernmentResponseIndex": {
+							"type": "integer"
+						},
+						"GovernmentResponseIndexForDisplay": {
+							"type": "integer"
+						},
+						"ContainmentHealthIndex": {
+							"type": "integer"
+						},
+						"ContainmentHealthIndexForDisplay": {
+							"type": "integer"
+						},
+						"EconomicSupportIndex": {
+							"type": "integer"
+						},
+						"EconomicSupportIndexForDisplay": {
+							"type": "integer"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "covidpolicy"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "310team6storageCosmosDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "cosmosdb"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "310team6storageCosmosDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "cosmosdb"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "data_8d11817b-66dd-492f-9290-0fe8d5fbdd5e_48e2ec93-0cda-4f26-a414-379207eafecc.json",
+						"fileSystem": "cosmosdb"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"CountryName": {
+							"type": "string"
+						},
+						"CountryCode": {
+							"type": "string"
+						},
+						"RegionName": {
+							"type": "null"
+						},
+						"RegionCode": {
+							"type": "null"
+						},
+						"Jurisdiction": {
+							"type": "string"
+						},
+						"Date": {
+							"type": "string"
+						},
+						"C1_School closing": {
+							"type": "integer"
+						},
+						"C1_Flag": {
+							"type": "integer"
+						},
+						"C2_Workplace closing": {
+							"type": "integer"
+						},
+						"C2_Flag": {
+							"type": "integer"
+						},
+						"C3_Cancel public events": {
+							"type": "integer"
+						},
+						"C3_Flag": {
+							"type": "integer"
+						},
+						"C4_Restrictions on gatherings": {
+							"type": "integer"
+						},
+						"C4_Flag": {
+							"type": "integer"
+						},
+						"C5_Close public transport": {
+							"type": "integer"
+						},
+						"C5_Flag": {
+							"type": "integer"
+						},
+						"C6_Stay at home requirements": {
+							"type": "integer"
+						},
+						"C6_Flag": {
+							"type": "integer"
+						},
+						"C7_Restrictions on internal movement": {
+							"type": "integer"
+						},
+						"C7_Flag": {
+							"type": "integer"
+						},
+						"C8_International travel controls": {
+							"type": "integer"
+						},
+						"E1_Income support": {
+							"type": "integer"
+						},
+						"E1_Flag": {
+							"type": "integer"
+						},
+						"E2_Debt contract relief": {
+							"type": "integer"
+						},
+						"E3_Fiscal measures": {
+							"type": "integer"
+						},
+						"E4_International support": {
+							"type": "integer"
+						},
+						"H1_Public information campaigns": {
+							"type": "integer"
+						},
+						"H1_Flag": {
+							"type": "integer"
+						},
+						"H2_Testing policy": {
+							"type": "integer"
+						},
+						"H3_Contact tracing": {
+							"type": "integer"
+						},
+						"H4_Emergency investment in healthcare": {
+							"type": "integer"
+						},
+						"H5_Investment in vaccines": {
+							"type": "integer"
+						},
+						"H6_Facial Coverings": {
+							"type": "integer"
+						},
+						"H6_Flag": {
+							"type": "integer"
+						},
+						"H7_Vaccination policy": {
+							"type": "integer"
+						},
+						"H7_Flag": {
+							"type": "integer"
+						},
+						"H8_Protection of elderly people": {
+							"type": "integer"
+						},
+						"H8_Flag": {
+							"type": "integer"
+						},
+						"M1_Wildcard": {
+							"type": "integer"
+						},
+						"StringencyIndex": {
+							"type": "integer"
+						},
+						"StringencyIndexForDisplay": {
+							"type": "integer"
+						},
+						"StringencyLegacyIndex": {
+							"type": "integer"
+						},
+						"StringencyLegacyIndexForDisplay": {
+							"type": "integer"
+						},
+						"GovernmentResponseIndex": {
+							"type": "integer"
+						},
+						"GovernmentResponseIndexForDisplay": {
+							"type": "integer"
+						},
+						"ContainmentHealthIndex": {
+							"type": "integer"
+						},
+						"ContainmentHealthIndexForDisplay": {
+							"type": "integer"
+						},
+						"EconomicSupportIndex": {
+							"type": "integer"
+						},
+						"EconomicSupportIndexForDisplay": {
+							"type": "integer"
+						},
+						"id": {
+							"type": "string"
+						},
+						"_rid": {
+							"type": "string"
+						},
+						"_self": {
+							"type": "string"
+						},
+						"_etag": {
+							"type": "string"
+						},
+						"_attachments": {
+							"type": "string"
+						},
+						"_ts": {
+							"type": "integer"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dbo.Covid19_Metrics.parquet",
+						"fileSystem": "sqlserver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "DateKey",
+						"type": "INT32"
+					},
+					{
+						"name": "FullDate",
+						"type": "DATE"
+					},
+					{
+						"name": "isWeekDay",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "DayOfWeek",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "DayName",
+						"type": "UTF8"
+					},
+					{
+						"name": "WeekOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "WeekName",
+						"type": "UTF8"
+					},
+					{
+						"name": "MonthOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "MonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "CalendarQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarYear",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalYear",
+						"type": "INT32"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet10')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dbo.Dates.parquet",
+						"fileSystem": "azuresql"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "DateKey",
+						"type": "INT32"
+					},
+					{
+						"name": "FullDate",
+						"type": "DATE"
+					},
+					{
+						"name": "isWeekDay",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "DayOfWeek",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "DayName",
+						"type": "UTF8"
+					},
+					{
+						"name": "WeekOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "WeekName",
+						"type": "UTF8"
+					},
+					{
+						"name": "MonthOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "MonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "CalendarQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarYear",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalYear",
+						"type": "INT32"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet11')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dbo.Dates.parquet",
+						"fileSystem": "sqlserver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "DateKey",
+						"type": "INT32"
+					},
+					{
+						"name": "FullDate",
+						"type": "DATE"
+					},
+					{
+						"name": "isWeekDay",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "DayOfWeek",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "DayName",
+						"type": "UTF8"
+					},
+					{
+						"name": "WeekOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "WeekName",
+						"type": "UTF8"
+					},
+					{
+						"name": "MonthOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "MonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "CalendarQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarYear",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalYear",
+						"type": "INT32"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet12')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage9",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dbo.Country.parquet",
+						"fileSystem": "sqlserver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "Country",
+						"type": "UTF8"
+					},
+					{
+						"name": "CountryCode",
+						"type": "UTF8"
+					},
+					{
+						"name": "Latitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "Longitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage7",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Cases.parquet",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet5')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Deaths.parquet",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet6')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Recovered.Parquet",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet8')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet9')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage8",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLDates')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dbo.Dates.parquet",
+						"fileSystem": "sqlserver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "DateKey",
+						"type": "INT32"
+					},
+					{
+						"name": "FullDate",
+						"type": "DATE"
+					},
+					{
+						"name": "isWeekDay",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "DayOfWeek",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "DayName",
+						"type": "UTF8"
+					},
+					{
+						"name": "WeekOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "WeekName",
+						"type": "UTF8"
+					},
+					{
+						"name": "MonthOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "MonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "CalendarQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarYear",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalYear",
+						"type": "INT32"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServerDates')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage6",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "sqlserver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServerMetrics')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage5",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "dbo.Covid19_Metrics.parquet",
+						"container": "sqlserver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ID",
+						"type": "INT32"
+					},
+					{
+						"name": "Updated",
+						"type": "DATE"
+					},
+					{
+						"name": "Confirmed",
+						"type": "INT32"
+					},
+					{
+						"name": "Confirmed_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Deaths",
+						"type": "INT32"
+					},
+					{
+						"name": "Deaths_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Recovered",
+						"type": "INT32"
+					},
+					{
+						"name": "Recovered_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Latitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "Longitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "ISO2",
+						"type": "UTF8"
+					},
+					{
+						"name": "ISO3",
+						"type": "UTF8"
+					},
+					{
+						"name": "Country_Region",
+						"type": "UTF8"
+					},
+					{
+						"name": "load_time",
+						"type": "INT96"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerCountries')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage4",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "sqlserver"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		}
+	]
+}
