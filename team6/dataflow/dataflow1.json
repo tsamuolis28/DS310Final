@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Parquet9",
+						"referenceName": "Parquet16",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -68,6 +68,9 @@
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     partitionFileNames:['Countries'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     partitionBy('hash', 1)) ~> sink1"
