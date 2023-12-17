@@ -11,6 +11,12 @@
 		"AzureBlobStorage1_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorage10_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorage11_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorage2_connectionString": {
 			"value": ""
 		},
