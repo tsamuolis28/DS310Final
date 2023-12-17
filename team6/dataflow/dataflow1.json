@@ -10,13 +10,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "Parquet15",
-						"type": "DatasetReference"
-					},
-					"name": "source2"
 				}
 			],
 			"sinks": [
@@ -31,12 +24,6 @@
 			"transformations": [
 				{
 					"name": "select1"
-				},
-				{
-					"name": "union1"
-				},
-				{
-					"name": "aggregate1"
 				}
 			],
 			"scriptLines": [
@@ -50,27 +37,14 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> source1",
-				"source(output(",
-				"          Country as string,",
-				"          CountryCode as string,",
-				"          Latitude as decimal(10,5),",
-				"          Longitude as decimal(10,5)",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     format: 'parquet') ~> source2",
-				"union1 select(mapColumn(",
+				"source1 select(mapColumn(",
 				"          Country,",
 				"          CountryCode",
 				"     ),",
 				"     partitionBy('hash', 1),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"source1, source2 union(byName: true)~> union1",
-				"select1 aggregate(groupBy(Country),",
-				"     Country = count(Country)) ~> aggregate1",
-				"aggregate1 sink(allowSchemaDrift: true,",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     partitionFileNames:['Countries.Parquet'],",
