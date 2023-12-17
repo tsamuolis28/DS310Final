@@ -17,6 +17,119 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Parquet21')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "operationalds"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage7",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Cases.parquet",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet5')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Deaths.parquet",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet6')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Recovered.Parquet",
+						"container": "ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Parquet8')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -554,7 +667,9 @@
 				"annotations": [],
 				"lastPublishTime": "2023-11-05T18:22:03Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Parquet3')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/CosmosDBToStorage')]",
@@ -761,77 +876,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dataflow1_copy1')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Parquet13",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Parquet9",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "select1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          ID as integer,",
-						"          Updated as date,",
-						"          Confirmed as integer,",
-						"          Confirmed_Change as integer,",
-						"          Deaths as integer,",
-						"          Deaths_Change as integer,",
-						"          Recovered as integer,",
-						"          Recovered_Change as integer,",
-						"          Latitude as decimal(10,5),",
-						"          Longitude as decimal(10,5),",
-						"          ISO2 as string,",
-						"          ISO3 as string,",
-						"          Country_Region as string,",
-						"          load_time as timestamp",
-						"     ),",
-						"     allowSchemaDrift: false,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> source1",
-						"source1 select(mapColumn(",
-						"          Country = Country_Region,",
-						"          CountryCode = ISO3",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     partitionFileNames:['Countries.parquet'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     partitionBy('hash', 1)) ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Parquet9')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/dataflow3')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -857,21 +901,21 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "Parquet4",
+								"referenceName": "Parquet18",
 								"type": "DatasetReference"
 							},
 							"name": "Cases"
 						},
 						{
 							"dataset": {
-								"referenceName": "Parquet5",
+								"referenceName": "Parquet19",
 								"type": "DatasetReference"
 							},
 							"name": "Deaths"
 						},
 						{
 							"dataset": {
-								"referenceName": "Parquet6",
+								"referenceName": "Parquet17",
 								"type": "DatasetReference"
 							},
 							"name": "Recoveries"
@@ -888,11 +932,8 @@
 							"name": "select2"
 						},
 						{
-							"name": "union2",
-							"description": "Combining rows from transformation 'source1, source2'\n"
-						},
-						{
-							"name": "select3"
+							"name": "select4",
+							"description": "Renaming union1 to select4 with recovery based columns\n"
 						}
 					],
 					"scriptLines": [
@@ -961,8 +1002,7 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select2",
-						"source1 union(byName: true)~> union2",
-						"union2 select(mapColumn(",
+						"union1 select(mapColumn(",
 						"          ID,",
 						"          Updated,",
 						"          Recovered,",
@@ -973,511 +1013,41 @@
 						"          load_time",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select3",
+						"     skipDuplicateMapOutputs: true) ~> select4",
 						"select2 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
 						"     partitionFileNames:['Cases.Parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> Cases",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> Cases",
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
 						"     partitionFileNames:['Deaths.Parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> Deaths",
-						"select3 sink(allowSchemaDrift: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> Deaths",
+						"select4 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     partitionFileNames:['Recovered.Parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> Recoveries"
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> Recoveries"
 					]
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/SQLServerMetrics')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow4')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Parquet10",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						},
-						{
-							"dataset": {
-								"referenceName": "Parquet11",
-								"type": "DatasetReference"
-							},
-							"name": "source2"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Parquet12",
-								"type": "DatasetReference"
-							},
-							"name": "Dates"
-						}
-					],
-					"transformations": [
-						{
-							"name": "union1"
-						},
-						{
-							"name": "select1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          DateKey as integer,",
-						"          FullDate as date,",
-						"          isWeekDay as boolean,",
-						"          DayOfWeek as integer,",
-						"          DayOfMonth as integer,",
-						"          DayOfQuarter as integer,",
-						"          DayOfYear as integer,",
-						"          DayName as string,",
-						"          WeekOfYear as integer,",
-						"          WeekName as string,",
-						"          MonthOfYear as integer,",
-						"          MonthName as string,",
-						"          CalendarQuarter as integer,",
-						"          CalendarQuarterName as string,",
-						"          CalendarYear as integer,",
-						"          FiscalMonth as integer,",
-						"          FiscalMonthName as string,",
-						"          FiscalQuarter as integer,",
-						"          FiscalQuarterName as string,",
-						"          FiscalYear as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> source1",
-						"source(output(",
-						"          DateKey as integer,",
-						"          FullDate as date,",
-						"          isWeekDay as boolean,",
-						"          DayOfWeek as integer,",
-						"          DayOfMonth as integer,",
-						"          DayOfQuarter as integer,",
-						"          DayOfYear as integer,",
-						"          DayName as string,",
-						"          WeekOfYear as integer,",
-						"          WeekName as string,",
-						"          MonthOfYear as integer,",
-						"          MonthName as string,",
-						"          CalendarQuarter as integer,",
-						"          CalendarQuarterName as string,",
-						"          CalendarYear as integer,",
-						"          FiscalMonth as integer,",
-						"          FiscalMonthName as string,",
-						"          FiscalQuarter as integer,",
-						"          FiscalQuarterName as string,",
-						"          FiscalYear as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> source2",
-						"source1, source2 union(byName: true)~> union1",
-						"union1 select(mapColumn(",
-						"          DateKey,",
-						"          FullDate,",
-						"          isWeekDay,",
-						"          DayOfWeek,",
-						"          DayOfMonth,",
-						"          DayOfYear,",
-						"          DayName,",
-						"          WeekOfYear,",
-						"          WeekName,",
-						"          MonthOfYear,",
-						"          MonthName,",
-						"          CalendarQuarter,",
-						"          CalendarQuarterName,",
-						"          CalendarYear,",
-						"          FiscalMonth,",
-						"          FiscalMonthName,",
-						"          FiscalQuarter,",
-						"          FiscalQuarterName,",
-						"          FiscalYear",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     partitionFileNames:['Dates'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> Dates"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow5_policies')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Json1",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Parquet9policies",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "select1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          CountryName as string,",
-						"          CountryCode as string,",
-						"          RegionName as string,",
-						"          RegionCode as string,",
-						"          Jurisdiction as string,",
-						"          Date as string,",
-						"          {C1_School closing} as integer,",
-						"          C1_Flag as integer,",
-						"          {C2_Workplace closing} as integer,",
-						"          C2_Flag as integer,",
-						"          {C3_Cancel public events} as integer,",
-						"          C3_Flag as integer,",
-						"          {C4_Restrictions on gatherings} as integer,",
-						"          C4_Flag as integer,",
-						"          {C5_Close public transport} as integer,",
-						"          C5_Flag as integer,",
-						"          {C6_Stay at home requirements} as integer,",
-						"          C6_Flag as integer,",
-						"          {C7_Restrictions on internal movement} as integer,",
-						"          C7_Flag as integer,",
-						"          {C8_International travel controls} as integer,",
-						"          {E1_Income support} as integer,",
-						"          E1_Flag as integer,",
-						"          {E2_Debt contract relief} as integer,",
-						"          {E3_Fiscal measures} as integer,",
-						"          {E4_International support} as integer,",
-						"          {H1_Public information campaigns} as integer,",
-						"          H1_Flag as integer,",
-						"          {H2_Testing policy} as integer,",
-						"          {H3_Contact tracing} as integer,",
-						"          {H4_Emergency investment in healthcare} as integer,",
-						"          {H5_Investment in vaccines} as integer,",
-						"          {H6_Facial Coverings} as integer,",
-						"          H6_Flag as integer,",
-						"          {H7_Vaccination policy} as integer,",
-						"          H7_Flag as integer,",
-						"          {H8_Protection of elderly people} as integer,",
-						"          H8_Flag as integer,",
-						"          M1_Wildcard as integer,",
-						"          StringencyIndex as integer,",
-						"          StringencyIndexForDisplay as integer,",
-						"          StringencyLegacyIndex as integer,",
-						"          StringencyLegacyIndexForDisplay as integer,",
-						"          GovernmentResponseIndex as integer,",
-						"          GovernmentResponseIndexForDisplay as integer,",
-						"          ContainmentHealthIndex as integer,",
-						"          ContainmentHealthIndexForDisplay as integer,",
-						"          EconomicSupportIndex as integer,",
-						"          EconomicSupportIndexForDisplay as integer,",
-						"          id as string,",
-						"          {_rid} as string,",
-						"          {_self} as string,",
-						"          {_etag} as string,",
-						"          {_attachments} as string,",
-						"          {_ts} as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     documentForm: 'documentPerLine') ~> source1",
-						"source1 select(mapColumn(",
-						"          C1_School_closing = {C1_School closing},",
-						"          C2_Workplace_closing = {C2_Workplace closing},",
-						"          CountryName,",
-						"          CountryCode,",
-						"          RegionName,",
-						"          RegionCode,",
-						"          Jurisdiction,",
-						"          Date,",
-						"          C1_Flag,",
-						"          C2_Flag,",
-						"          C3_Cancel_public_events = {C3_Cancel public events},",
-						"          C3_Flag,",
-						"          C4_Restrictions_on_gatherings = {C4_Restrictions on gatherings},",
-						"          C4_Flag,",
-						"          C5_Close_public_transport = {C5_Close public transport},",
-						"          C5_Flag,",
-						"          C6_Stay_at_home_requirements = {C6_Stay at home requirements},",
-						"          C6_Flag,",
-						"          C7_Restrictions_on_internal_movement = {C7_Restrictions on internal movement},",
-						"          C7_Flag,",
-						"          C8_International_travel_controls = {C8_International travel controls},",
-						"          E1_Income_support = {E1_Income support},",
-						"          E1_Flag,",
-						"          E2_Debt_contract_relief = {E2_Debt contract relief},",
-						"          E3_Fiscalmeasures = {E3_Fiscal measures},",
-						"          E4_Internationalsupport = {E4_International support},",
-						"          H1_Public_information_campaigns = {H1_Public information campaigns},",
-						"          H1_Flag,",
-						"          H2_Testingpolicy = {H2_Testing policy},",
-						"          H3_Contacttracing = {H3_Contact tracing},",
-						"          H4_Emergency_investment_in_healthcare = {H4_Emergency investment in healthcare},",
-						"          H5_Investment_in_vaccines = {H5_Investment in vaccines},",
-						"          H6_Facial_Coverings = {H6_Facial Coverings},",
-						"          H6_Flag,",
-						"          H7_Vaccination_policy = {H7_Vaccination policy},",
-						"          H7_Flag,",
-						"          H8_Protection_of_elderly_people = {H8_Protection of elderly people},",
-						"          H8_Flag,",
-						"          M1_Wildcard,",
-						"          StringencyIndex,",
-						"          StringencyIndexForDisplay,",
-						"          StringencyLegacyIndexForDisplay,",
-						"          StringencyLegacyIndexForDisplay = GovernmentResponseIndex,",
-						"          GovernmentResponseIndexForDisplay,",
-						"          ContainmentHealthIndex,",
-						"          EconomicSupportIndex = ContainmentHealthIndexForDisplay,",
-						"          EconomicSupportIndex,",
-						"          EconomicSupportIndexForDisplay,",
-						"          id,",
-						"          {_rid},",
-						"          {_self},",
-						"          {_etag},",
-						"          {_etag} = {_attachments},",
-						"          {_ts}",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     partitionFileNames:['Policies'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sink1"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Parquet9policies')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Countries Pipeline Fix')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Countries flow fix",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "dataflow1_copy1",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/dataflow1_copy1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Data Flow Pipelines')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "CountriesFlow",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "dataflow1",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"source2": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "Metrics Flow",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "dataflow3",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"source2": {},
-									"Cases": {},
-									"Deaths": {},
-									"Recoveries": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "Dates Flow",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "dataflow4",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"source2": {},
-									"Dates": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "Policy flow",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "dataflow5_policies",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/dataflow1')]",
-				"[concat(variables('factoryId'), '/dataflows/dataflow3')]",
-				"[concat(variables('factoryId'), '/dataflows/dataflow4')]",
-				"[concat(variables('factoryId'), '/dataflows/dataflow5_policies')]"
 			]
 		}
 	]
