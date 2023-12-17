@@ -39,9 +39,6 @@
 						"referenceName": "Parquet17",
 						"type": "DatasetReference"
 					},
-					"name": "Recoverie"
-				},
-				{
 					"name": "Recoveries"
 				}
 			],
@@ -56,14 +53,8 @@
 					"name": "select2"
 				},
 				{
-					"name": "union2",
-					"description": "Combining rows from transformation 'source1, source2'\n"
-				},
-				{
-					"name": "select3"
-				},
-				{
-					"name": "select4"
+					"name": "select4",
+					"description": "Renaming union1 to select4 with recovery based columns\n"
 				}
 			],
 			"scriptLines": [
@@ -132,8 +123,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select2",
-				"source1, source2 union(byName: true)~> union2",
-				"union2 select(mapColumn(",
+				"union1 select(mapColumn(",
 				"          ID,",
 				"          Updated,",
 				"          Recovered,",
@@ -142,18 +132,6 @@
 				"          ISO3,",
 				"          Country_Region,",
 				"          load_time",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select3",
-				"union1 select(mapColumn(",
-				"          ID,",
-				"          Updated,",
-				"          Confirmed = Recovered,",
-				"          Confirmed_Change = Recovered_Change,",
-				"          Deaths = ISO2,",
-				"          Deaths_Change = ISO3,",
-				"          Recovered = Country_Region,",
-				"          Recovered_Change = load_time",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select4",
@@ -165,7 +143,8 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> Cases",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> Cases",
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
@@ -174,20 +153,17 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> Deaths",
-				"select3 sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> Deaths",
+				"select4 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
-				"     partitionFileNames:['Recovered.Parquet'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> Recoverie",
-				"select4 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> Recoveries"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> Recoveries"
 			]
 		}
 	}
