@@ -30,6 +30,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Policies",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -865,7 +866,8 @@
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     partitionFileNames:['Countries.Parquet'],",
+						"     partitionFileNames:['Countries.parquet'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",

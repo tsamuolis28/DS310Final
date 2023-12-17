@@ -2247,6 +2247,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "country",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -2271,6 +2272,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Recoveries",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -2295,6 +2297,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Cases",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -2319,6 +2322,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Deaths",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -2389,6 +2393,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Dates",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -2413,6 +2418,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Policies",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -3228,7 +3234,8 @@
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     partitionFileNames:['Countries.Parquet'],",
+						"     partitionFileNames:['Countries.parquet'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
@@ -3477,7 +3484,8 @@
 						"select2 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     partitionFileNames:['Cases.Parquet'],",
+						"     partitionFileNames:['Cases.parquet'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
@@ -3487,7 +3495,8 @@
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     partitionFileNames:['Deaths.Parquet'],",
+						"     partitionFileNames:['Deaths.parquet'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
@@ -3497,7 +3506,8 @@
 						"select4 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     partitionFileNames:['Recoveries.Parquet'],",
+						"     partitionFileNames:['Recoveries.parquet'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
@@ -3598,13 +3608,13 @@
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     partitionFileNames:['Dates.Parquet'],",
+						"     partitionFileNames:['Dates.parquet'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     partitionBy('hash', 1)) ~> Dates"
+						"     skipDuplicateMapOutputs: true) ~> Dates"
 					]
 				}
 			},
@@ -3766,7 +3776,8 @@
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     partitionFileNames:['Policies.Parquet'],",
+						"     partitionFileNames:['Policies.parquet'],",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",

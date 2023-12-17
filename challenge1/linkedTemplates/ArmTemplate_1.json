@@ -1408,6 +1408,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "country",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -1430,6 +1431,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Recoveries",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -1452,6 +1454,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Cases",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -1474,6 +1477,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Deaths",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
@@ -1540,6 +1544,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"folderPath": "Dates",
 						"fileSystem": "operationalds"
 					},
 					"compressionCodec": "snappy"
