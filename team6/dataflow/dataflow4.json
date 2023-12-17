@@ -79,12 +79,13 @@
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
-				"     partitionFileNames:['Dates.Parquet'],",
+				"     partitionFileNames:[''],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> Dates"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> Dates"
 			]
 		}
 	}
