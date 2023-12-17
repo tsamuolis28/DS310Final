@@ -89,6 +89,53 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/Aggregate Test')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1_countries_aggregate",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow1_countries_aggregate')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSQLtoStorage')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -406,7 +453,6 @@
 								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"source2": {},
 									"sink1": {}
 								}
 							},
@@ -2426,6 +2472,30 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Parquet22')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "aggregatetest"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage2')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Parquet3')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -3169,13 +3239,6 @@
 								"type": "DatasetReference"
 							},
 							"name": "source1"
-						},
-						{
-							"dataset": {
-								"referenceName": "Parquet15",
-								"type": "DatasetReference"
-							},
-							"name": "source2"
 						}
 					],
 					"sinks": [
@@ -3190,9 +3253,6 @@
 					"transformations": [
 						{
 							"name": "select1"
-						},
-						{
-							"name": "union1"
 						}
 					],
 					"scriptLines": [
@@ -3206,24 +3266,13 @@
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
 						"     format: 'parquet') ~> source1",
-						"source(output(",
-						"          Country as string,",
-						"          CountryCode as string,",
-						"          Latitude as decimal(10,5),",
-						"          Longitude as decimal(10,5)",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> source2",
-						"union1 select(mapColumn(",
+						"source1 select(mapColumn(",
 						"          Country,",
 						"          CountryCode",
 						"     ),",
 						"     partitionBy('hash', 1),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select1",
-						"source1, source2 union(byName: true)~> union1",
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
@@ -3239,12 +3288,11 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Parquet14')]",
-				"[concat(variables('factoryId'), '/datasets/Parquet15')]",
 				"[concat(variables('factoryId'), '/datasets/Parquet16')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dataflow1_countries')]",
+			"name": "[concat(parameters('factoryName'), '/dataflow1_countries_aggregate')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3269,7 +3317,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "Parquet16",
+								"referenceName": "Parquet22",
 								"type": "DatasetReference"
 							},
 							"name": "sink1"
@@ -3281,6 +3329,9 @@
 						},
 						{
 							"name": "union1"
+						},
+						{
+							"name": "aggregate1"
 						}
 					],
 					"scriptLines": [
@@ -3304,13 +3355,15 @@
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
 						"     format: 'parquet') ~> source2",
-						"union1 select(mapColumn(",
+						"aggregate1 select(mapColumn(",
 						"          Country,",
 						"          CountryCode",
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select1",
 						"source1, source2 union(byName: true)~> union1",
+						"union1 aggregate(groupBy(Country),",
+						"     CountryCode = first(CountryCode)) ~> aggregate1",
 						"select1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
@@ -3327,7 +3380,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Parquet14')]",
 				"[concat(variables('factoryId'), '/datasets/Parquet15')]",
-				"[concat(variables('factoryId'), '/datasets/Parquet16')]"
+				"[concat(variables('factoryId'), '/datasets/Parquet22')]"
 			]
 		},
 		{
@@ -3631,141 +3684,6 @@
 						"     validateSchema: false,",
 						"     format: 'parquet',",
 						"     partitionFileNames:['Dates.Parquet'],",
-						"     umask: 0022,",
-						"     preCommands: [],",
-						"     postCommands: [],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> Dates"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Parquet10')]",
-				"[concat(variables('factoryId'), '/datasets/Parquet11')]",
-				"[concat(variables('factoryId'), '/datasets/Parquet20')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow4_dates')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Parquet10",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						},
-						{
-							"dataset": {
-								"referenceName": "Parquet11",
-								"type": "DatasetReference"
-							},
-							"name": "source2"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Parquet20",
-								"type": "DatasetReference"
-							},
-							"name": "Dates"
-						}
-					],
-					"transformations": [
-						{
-							"name": "union1"
-						},
-						{
-							"name": "select1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          DateKey as integer,",
-						"          FullDate as date,",
-						"          isWeekDay as boolean,",
-						"          DayOfWeek as integer,",
-						"          DayOfMonth as integer,",
-						"          DayOfQuarter as integer,",
-						"          DayOfYear as integer,",
-						"          DayName as string,",
-						"          WeekOfYear as integer,",
-						"          WeekName as string,",
-						"          MonthOfYear as integer,",
-						"          MonthName as string,",
-						"          CalendarQuarter as integer,",
-						"          CalendarQuarterName as string,",
-						"          CalendarYear as integer,",
-						"          FiscalMonth as integer,",
-						"          FiscalMonthName as string,",
-						"          FiscalQuarter as integer,",
-						"          FiscalQuarterName as string,",
-						"          FiscalYear as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> source1",
-						"source(output(",
-						"          DateKey as integer,",
-						"          FullDate as date,",
-						"          isWeekDay as boolean,",
-						"          DayOfWeek as integer,",
-						"          DayOfMonth as integer,",
-						"          DayOfQuarter as integer,",
-						"          DayOfYear as integer,",
-						"          DayName as string,",
-						"          WeekOfYear as integer,",
-						"          WeekName as string,",
-						"          MonthOfYear as integer,",
-						"          MonthName as string,",
-						"          CalendarQuarter as integer,",
-						"          CalendarQuarterName as string,",
-						"          CalendarYear as integer,",
-						"          FiscalMonth as integer,",
-						"          FiscalMonthName as string,",
-						"          FiscalQuarter as integer,",
-						"          FiscalQuarterName as string,",
-						"          FiscalYear as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> source2",
-						"source1, source2 union(byName: true)~> union1",
-						"union1 select(mapColumn(",
-						"          DateKey,",
-						"          FullDate,",
-						"          isWeekDay,",
-						"          DayOfWeek,",
-						"          DayOfMonth,",
-						"          DayOfYear,",
-						"          DayName,",
-						"          WeekOfYear,",
-						"          WeekName,",
-						"          MonthOfYear,",
-						"          MonthName,",
-						"          CalendarQuarter,",
-						"          CalendarQuarterName,",
-						"          CalendarYear,",
-						"          FiscalMonth,",
-						"          FiscalMonthName,",
-						"          FiscalQuarter,",
-						"          FiscalQuarterName,",
-						"          FiscalYear",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     partitionFileNames:['Dates'],",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
