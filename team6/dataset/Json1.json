@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "data_8d11817b-66dd-492f-9290-0fe8d5fbdd5e_48e2ec93-0cda-4f26-a414-379207eafecc.json",
 				"container": "cosmosdb"
 			}
 		},
