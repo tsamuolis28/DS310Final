@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Parquet9policies",
+						"referenceName": "Parquet21",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -150,6 +150,9 @@
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     partitionFileNames:['Policies'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]

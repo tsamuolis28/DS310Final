@@ -22,21 +22,21 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Parquet4",
+						"referenceName": "Parquet18",
 						"type": "DatasetReference"
 					},
 					"name": "Cases"
 				},
 				{
 					"dataset": {
-						"referenceName": "Parquet5",
+						"referenceName": "Parquet19",
 						"type": "DatasetReference"
 					},
 					"name": "Deaths"
 				},
 				{
 					"dataset": {
-						"referenceName": "Parquet6",
+						"referenceName": "Parquet17",
 						"type": "DatasetReference"
 					},
 					"name": "Recoveries"
@@ -143,18 +143,27 @@
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     partitionFileNames:['Cases.Parquet'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> Cases",
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     partitionFileNames:['Deaths.Parquet'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> Deaths",
 				"select3 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
 				"     partitionFileNames:['Recovered.Parquet'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> Recoveries"
 			]
