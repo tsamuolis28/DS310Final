@@ -432,7 +432,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "dataflow3",
+								"referenceName": "dataflow3_metrics",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -465,7 +465,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "dataflow4",
+								"referenceName": "dataflow4_dates",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -520,8 +520,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/dataflow1_countries')]",
-				"[concat(variables('factoryId'), '/dataflows/dataflow3')]",
-				"[concat(variables('factoryId'), '/dataflows/dataflow4')]",
+				"[concat(variables('factoryId'), '/dataflows/dataflow3_metrics')]",
+				"[concat(variables('factoryId'), '/dataflows/dataflow4_dates')]",
 				"[concat(variables('factoryId'), '/dataflows/dataflow5_policies')]"
 			]
 		},
@@ -3156,6 +3156,93 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Parquet14",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquet15",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Parquet16",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						},
+						{
+							"name": "union1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Country as string,",
+						"          CountryCode as string,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5)",
+						"     ),",
+						"     allowSchemaDrift: false,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> source1",
+						"source(output(",
+						"          Country as string,",
+						"          CountryCode as string,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> source2",
+						"union1 select(mapColumn(",
+						"          Country,",
+						"          CountryCode",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"source1, source2 union(byName: true)~> union1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     partitionFileNames:['Countries.Parquet'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Parquet14')]",
+				"[concat(variables('factoryId'), '/datasets/Parquet15')]",
+				"[concat(variables('factoryId'), '/datasets/Parquet16')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dataflow1_countries')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -3243,7 +3330,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dataflow3')]",
+			"name": "[concat(parameters('factoryName'), '/dataflow3_metrics')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3422,7 +3509,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dataflow4')]",
+			"name": "[concat(parameters('factoryName'), '/dataflow4_dates')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
