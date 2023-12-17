@@ -6,10 +6,17 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Parquet1",
+						"referenceName": "Parquet14",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "Parquet15",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [
@@ -24,6 +31,9 @@
 			"transformations": [
 				{
 					"name": "select1"
+				},
+				{
+					"name": "union1"
 				}
 			],
 			"scriptLines": [
@@ -37,12 +47,23 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet') ~> source1",
-				"source1 select(mapColumn(",
+				"source(output(",
+				"          Country as string,",
+				"          CountryCode as string,",
+				"          Latitude as decimal(10,5),",
+				"          Longitude as decimal(10,5)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> source2",
+				"union1 select(mapColumn(",
 				"          Country,",
 				"          CountryCode",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
+				"source1, source2 union(byName: true)~> union1",
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
