@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Parquet16",
+						"referenceName": "Parquet22",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"

@@ -1,0 +1,19 @@
+{
+	"name": "Parquet22",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "aggregatetest"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
