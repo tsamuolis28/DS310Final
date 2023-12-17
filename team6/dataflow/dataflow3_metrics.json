@@ -1,5 +1,5 @@
 {
-	"name": "dataflow3",
+	"name": "dataflow3_metrics",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -158,7 +158,6 @@
 				"select4 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
-				"     partitionFileNames:['Recoveries.Parquet'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

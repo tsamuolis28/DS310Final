@@ -1,5 +1,5 @@
 {
-	"name": "dataflow4",
+	"name": "dataflow4_dates",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
